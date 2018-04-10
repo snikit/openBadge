@@ -43,7 +43,7 @@ function isFail(req, urlResponse) {
     return !(
       urlResponse.statusCode == req.query[KEYS.CRITERIA_CODE] &&
       urlResponse.body[req.query[KEYS.CRITERIA_KEY]] ==
-        req.query[KEYS.CRITERIA_VALUE]
+      req.query[KEYS.CRITERIA_VALUE]
     )
   }
 
@@ -123,7 +123,7 @@ function validateRequest(req) {
   }
 }
 
-app.get('/svg', function(req, res) {
+app.get('/svg', function (req, res) {
   openBadge(
     {
       text: [
@@ -135,7 +135,7 @@ app.get('/svg', function(req, res) {
         right: req.query[KEYS.STATUS_COLOR]
       }
     },
-    function(error, badgeSvg) {
+    function (error, badgeSvg) {
       if (error) {
         console.log(error)
         res.send({
@@ -150,7 +150,7 @@ app.get('/svg', function(req, res) {
   )
 })
 
-app.get('/svgfrom', function(req, res) {
+app.get('/svgbadgers', function (req, res) {
   let errResponse = validateRequest(req)
 
   if (errResponse) {
@@ -158,7 +158,7 @@ app.get('/svgfrom', function(req, res) {
     return
   }
 
-  request(req.query[KEYS.URL], function(error, urlresponse, body) {
+  request(req.query[KEYS.URL], function (error, urlresponse, body) {
     if (error) {
       console.log(error)
       res.send({
@@ -195,7 +195,7 @@ app.get('/svgfrom', function(req, res) {
             '#' + (options.rcolor ? options.rcolor : fail ? 'ff0000' : '00ff00')
         }
       },
-      function(err, badgeSvg) {
+      function (err, badgeSvg) {
         if (err) {
           console.log(err)
           res.send({
@@ -213,19 +213,20 @@ app.get('/svgfrom', function(req, res) {
 
 //#############TEST##ENDPOINTS######
 
-app.get('/test', function(req, res) {
+app.get('/test', function (req, res) {
   let json = {
-    status: 'up'
+    status: 'up',
+    percentage: '99.99 %'
   }
   res.set('Content-Type', 'application/json')
   if (req.query.code) res.status(req.query.code)
   res.send(json)
 })
 
-app.get('/', function(req, res) {
+app.get('/', function (req, res) {
   res.send(`
     <html>
-      <h1>Welcome to Badges ! </h1> 
+      <h1>Welcome to Badges ! </h1>
     </html>
   `)
 })
