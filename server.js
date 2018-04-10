@@ -43,7 +43,7 @@ function isFail(req, urlResponse) {
     return !(
       urlResponse.statusCode == req.query[KEYS.CRITERIA_CODE] &&
       urlResponse.body[req.query[KEYS.CRITERIA_KEY]] ==
-      req.query[KEYS.CRITERIA_VALUE]
+        req.query[KEYS.CRITERIA_VALUE]
     )
   }
 
@@ -123,7 +123,7 @@ function validateRequest(req) {
   }
 }
 
-app.get('/svg', function (req, res) {
+app.get('/svg', function(req, res) {
   openBadge(
     {
       text: [
@@ -132,10 +132,11 @@ app.get('/svg', function (req, res) {
       ],
       color: {
         left: req.query[KEYS.LABEL_COLOR],
-        right: req.query[KEYS.STATUS_COLOR]
+        right: req.query[KEYS.STATUS_COLOR],
+        shadow: '#010101'
       }
     },
-    function (error, badgeSvg) {
+    function(error, badgeSvg) {
       if (error) {
         console.log(error)
         res.send({
@@ -150,7 +151,7 @@ app.get('/svg', function (req, res) {
   )
 })
 
-app.get('/svgbadges', function (req, res) {
+app.get('/svgbadges', function(req, res) {
   let errResponse = validateRequest(req)
 
   if (errResponse) {
@@ -158,7 +159,7 @@ app.get('/svgbadges', function (req, res) {
     return
   }
 
-  request(req.query[KEYS.URL], function (error, urlresponse, body) {
+  request(req.query[KEYS.URL], function(error, urlresponse, body) {
     if (error) {
       console.log(error)
       res.send({
@@ -190,12 +191,13 @@ app.get('/svgbadges', function (req, res) {
       {
         text: [options.label, options.status],
         color: {
-          left: '#' + options.lcolor,
+          left: '#' + (options.lcolor ? options.lcolor : '555'),
           right:
-            '#' + (options.rcolor ? options.rcolor : fail ? 'ff0000' : '00ff00')
+            '#' + (options.rcolor ? options.rcolor : fail ? 'cc1111' : '4c1'),
+          shadow: '#010101'
         }
       },
-      function (err, badgeSvg) {
+      function(err, badgeSvg) {
         if (err) {
           console.log(err)
           res.send({
@@ -213,7 +215,7 @@ app.get('/svgbadges', function (req, res) {
 
 //#############TEST##ENDPOINTS######
 
-app.get('/test', function (req, res) {
+app.get('/test', function(req, res) {
   let json = {
     status: 'up',
     percentage: '99.99 %'
@@ -223,7 +225,7 @@ app.get('/test', function (req, res) {
   res.send(json)
 })
 
-app.get('/', function (req, res) {
+app.get('/', function(req, res) {
   res.send(`
     <html>
       <h1>Welcome to Badges ! </h1>
