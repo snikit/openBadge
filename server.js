@@ -19,14 +19,14 @@ let types = [HEALTH, AVAIL]
 let $_SVG_TYPE = ''
 
 const KEYS = {
-  CRITERIA_KEY: 'ckey',
-  CRITERIA_VALUE: 'cval',
-  CRITERIA_CODE: 'ccode',
+  CRITERIA_KEY: 'key',
+  CRITERIA_VALUE: 'value',
+  CRITERIA_CODE: 'httpstatus',
   LABEL_COLOR: 'lcolor',
-  LABEL_VAL: 'lval',
+  LABEL_VAL: 'label',
   LABEL_KEY: 'lkey',
   STATUS_VAL: 'sval',
-  STATUS_KEY: 'skey',
+  STATUS_KEY: 'jsonkey',
   ISTATUS_VAL: 'isval',
   STATUS_COLOR: 'scolor',
   ISTATUS_COLOR: 'iscolor',
@@ -150,7 +150,7 @@ app.get('/svg', function (req, res) {
   )
 })
 
-app.get('/svgbadgers', function (req, res) {
+app.get('/svgbadges', function (req, res) {
   let errResponse = validateRequest(req)
 
   if (errResponse) {
