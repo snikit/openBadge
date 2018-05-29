@@ -158,7 +158,7 @@ function getParams(req) {
   return params;
 }
 
-app.get(BASE + '/svg', function (req, res) {
+app.get('/svg', function (req, res) {
   const errResponse = validateRequest(req)
   const params = getParams(req);
 
@@ -218,10 +218,78 @@ app.get(BASE + '/svg', function (req, res) {
   })
 })
 
-app.get(BASE + '/hi', function (req, res) {
-  res.send('<h1>Welcome to Badges ! </h1>')
+app.get('/', function (req, res) {
+  res.send(`
+<style>
+
+th, td {
+    padding: 15px;
+    text-align: left;
+	 border: 1px solid black;
+}
+
+table {
+    border: 1px solid black;
+}
+</style>
+
+<h1 id="svgbadges">SVG-BADGES</h1>
+
+<p>https://badges.dev.plmcloud.net/</p>
+
+<p><strong>Svg-badges is a widget as a service solution for showing svg badges for a service related states like health state , availablity etc.</strong></p>
+
+<p>Current supported states are</p>
+
+<ul>
+<li>Health Check</li>
+
+<li>Availability</li>
+</ul>
+
+<h1 id="howto">How to</h1>
+
+<p>Endpoints </p>
+
+<p>1 <strong>/</strong> : How to </p>
+
+<p>2 <strong>/svg</strong> : GET endpoint with a number of parameters that we can pass in Url . The app will process it and generate a svg that can be embedded in a markdown or html file . </p>
+
+<p>Parameters</p>
+
+<p><table >
+<tr> <th>Params</th> <th>Required</th> <th>Function</th> </tr>
+<tr> <td>type</td> <td>yes</td> <td>type of check (<strong>'health' or  'availability'</strong>)</td></tr>
+<tr><td>url</td><td>yes</td><td>the url of the service to hit example health or availability endpoint</td></tr>
+<tr><td>key</td><td>yes</td><td>key in th eresponse json of above url</td></tr>
+<tr><td>value</td><td>required if type is <strong>'health'</strong></td><td>in <strong>'health'</strong> this value is compared with the value recieved in the above url's response json's key</td></tr>
+<tr><td>label</td><td>yes</td><td>the label or the name on the left side of svg</td></tr>
+<tr><td>minval</td><td>optional when type is <strong>'availability'</strong> . Used for denoting minimum availability percentage (Badge is green if response is greater than minval . By default minimum availability is considered to be 99 %)</td><td>the label or the name on the left side of svg</td></tr>
+</table></p>
+<h1 id="examples">Examples</h1>
+
+<ol>
+<li><p>Health Badge
+<p>
+a. <b>https://badges.dev.plmcloud.net/svg?url=https://ccuserpreferencesservice.dev.plmcloud.net/v2/api-docs&amp;type=health&amp;label=Sample%20Health%20Badge&amp;key=swagger&amp;value=2.0</b>
+<img src="https://badges.dev.plmcloud.net/svg?url=https://ccuserpreferencesservice.dev.plmcloud.net/v2/api-docs&amp;type=health&amp;label=Sample%20Health%20Badge&amp;key=swagger&amp;value=2.0" alt="heath sample badge" />
+</p><p>
+b. <b>https://badges.dev.plmcloud.net/svg?url=https://ccuserpreferencesservice.dev.plmcloud.net/v2/api-docs&amp;type=health&amp;label=Sample%20Health%20Badge&amp;key=swaggers&amp;value=2.0</b>
+<img src="https://badges.dev.plmcloud.net/svg?url=https://ccuserpreferencesservice.dev.plmcloud.net/v2/api-docs&amp;type=health&amp;label=Sample%20Health%20Badge&amp;key=swaggers&amp;value=2.0" alt="heath sample badge" /></p></li>
+
+<li>
+<p>
+a. <b>https://badges.dev.plmcloud.net/svg?url=https://ccuserpreferencesservice.dev.plmcloud.net/v2/api-docs&amp;type=availability&amp;label=Sample%20Health%20Badge&amp;key=swagger</b>
+<img src="https://badges.dev.plmcloud.net/svg?url=https://ccuserpreferencesservice.dev.plmcloud.net/v2/api-docs&amp;type=availability&amp;label=Sample%20Health%20Badge&amp;key=swagger" alt="heath sample badge" />
+</p><p>
+b. <b>https://badges.dev.plmcloud.net/svg?url=https://ccuserpreferencesservice.dev.plmcloud.net/v2/api-docs&amp;type=availability&amp;label=Sample%20Health%20Badge&amp;key=swagger&amp;minval=1</b>
+<img src="https://badges.dev.plmcloud.net/svg?url=https://ccuserpreferencesservice.dev.plmcloud.net/v2/api-docs&amp;type=availability&amp;label=Sample%20Health%20Badge&amp;key=swagger&amp;minval=1" alt="heath sample badge" /></p></li>
+
+</li>
+</ol>
+  `)
 })
 
 //##################################
-app.listen(4000);
-// module.exports = app
+//app.listen(4000);
+module.exports = app
