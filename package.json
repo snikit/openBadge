@@ -18,8 +18,7 @@
 		"lodash": "^3.10.1",
 		"npm": "^5.10.0",
 		"opentype.js": "^0.6.0",
-		"request": "^2.85.0",
-		"swagger-to-locustfile": "^0.6.1"
+		"request": "^2.85.0"
 	},
 	"keywords": [
 		"svg",
