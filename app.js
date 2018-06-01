@@ -1,9 +1,13 @@
+process.env.SAM_AUTH_URL = 'https://samauth.teamcenterwebservices.com/token'
+process.env.SAM_HEADER_KEY = 'YWE4MGQzNWMtMGRiMS00MWU0LTgzYzgtNzllODE3ODNlMGFjOmJ4ZFRhZmRmTEN2U2FzV25KWFByVjJKUmowQnhqN2ZqTkNZQXhUenoza1RxWFluMUU3cng0K05nSFptVWxjUmY='
+
 let failflag = true
 
 var express = require('express')
 var app = express()
 var bodyParser = require('body-parser')
 var request = require('request')
+var access_token = ''
 
 app.use(bodyParser.urlencoded({ extended: true }))
 app.use(bodyParser.json())
@@ -171,6 +175,7 @@ app.get('/svg', function (req, res) {
 
   // hitting the given url for response
   request(params[KEYS.URL], function (error, urlresponse, body) {
+
     if (error) {
       res.status(500);
       res.send({
@@ -183,6 +188,26 @@ app.get('/svg', function (req, res) {
       body = JSON.parse(body)
     } catch (e) {
       console.log('Failed to parse response . Hope it is already json !');
+    }
+
+    if (!access_token) {
+
+      request({
+        url: process.env.SAM_AUTH_URL,
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded', 'Authorization': `Basic ${process.env.SAM_HEADER_KEY}` },
+        form: { 'grant_type': 'client_credentials' },
+        method: 'POST'
+      }, function (error, urlresponse, body) {
+        if (error) {
+          res.status(500);
+          res.send({
+            msg: `${error}.`
+          })
+          return
+        }
+        access_token = body.access_token;
+      })
+
     }
 
     const apiResponse = {
@@ -211,6 +236,7 @@ app.get('/svg', function (req, res) {
           })
           return
         }
+        res.setHeader('Authorization', access_token);
         res.set('Content-Type', 'image/svg+xml')
         res.send(badgeSvg)
       }
@@ -291,5 +317,5 @@ b. <b>https://badges.dev.plmcloud.net/svg?url=https://ccuserpreferencesservice.d
 })
 
 //##################################
-//app.listen(4000);
+app.listen(4000);
 module.exports = app
